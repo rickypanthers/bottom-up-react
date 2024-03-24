@@ -1,23 +1,41 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import TaskList from './Tasklist';
 import './App.css';
 
 function App() {
+  const [inputVal, setInputVal] = useState('');
+  const [allTodos, setAllTodos] = useState([]);
+  const handleInputChange = (e) => {
+    setInputVal(e.target.value);
+  };
+
+  const handleAddTask = () => {
+    let updatedTodos = [...allTodos];
+    updatedTodos.push({ task: inputVal, checked: false });
+    setAllTodos(updatedTodos);
+    setInputVal('');
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div>
+      <h1>TODO LIST</h1>
+      <div className="parent-input-div">
+        <input
+          type="text"
+          className="input-task"
+          value={inputVal}
+          onChange={handleInputChange}
+        />
+        <button
+          className="add-task-btn"
+          onClick={handleAddTask}
+          disabled={!inputVal}
         >
-          Learn React
-        </a>
-      </header>
+          Add Task
+        </button>
+      </div>
+      {allTodos.length > 0 && (
+        <TaskList tasks={allTodos} handleTaskUpdate={setAllTodos} />
+      )}
     </div>
   );
 }
